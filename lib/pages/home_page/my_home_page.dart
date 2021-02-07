@@ -35,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
         labelStyle: TextStyle(fontSize: 100,fontWeight: FontWeight.w900),
       ),*/
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
         currentIndex: _currentIndex,
@@ -56,8 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget chooseWidget() {
     switch(_currentIndex){
-      case 0:
-        return FeedPage();
       case 1:
         return SearchPage();
       case 2:

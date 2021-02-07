@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/feed_posts.dart';
+import 'package:instagram_clone/pages/message_page.dart';
 import 'package:instagram_clone/tiles/post_tile.dart';
 
 class FeedPage extends StatefulWidget {
@@ -18,7 +19,6 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -26,18 +26,22 @@ class _FeedPageState extends State<FeedPage> {
           style: TextStyle(
               color: Colors.black, fontFamily: 'Pattaya', fontSize: 30),
         ),
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: Icon(
           Icons.add_box_outlined,
           color: Colors.black,
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Icon(
-              Icons.message_outlined,
-              color: Colors.black,
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>MessagePage()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(
+                Icons.message_outlined,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
