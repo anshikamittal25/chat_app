@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/feed_posts.dart';
-import 'package:instagram_clone/pages/message_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/message_screen/message_page.dart';
 import 'package:instagram_clone/tiles/post_tile.dart';
 
 class FeedPage extends StatefulWidget {

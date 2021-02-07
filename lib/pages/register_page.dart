@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram_clone/pages/feed_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/pages/verify_email.dart';
 import 'package:instagram_clone/services/my_auth_class.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:instagram_clone/services/shared_pref.dart';
-
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -14,11 +15,26 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey =new GlobalKey<ScaffoldState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  bool isObscure = true;
+  GlobalKey<FormState> _formKey;
+  GlobalKey<ScaffoldState> _scaffoldKey;
+  TextEditingController _usernameController;
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
+  bool isObscure;
+  bool isLoading;
+
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _scaffoldKey = new GlobalKey<ScaffoldState>();
+    _usernameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    isObscure = true;
+    isLoading = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,13 +74,34 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Container(
                           height: MediaQuery.of(context).size.height / 20,
                           child: TextFormField(
+                            controller: _usernameController,
+                            validator: (s) {
+                              if (s.isEmpty) {
+                                return 'Please enter an username';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              hintText: 'UserName',
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 1, color: Colors.grey)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20.0, 10, 20, 10),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 20,
+                          child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
                             controller: _emailController,
                             validator: (s) {
                               if (s.isEmpty) {
                                 return 'Please enter Email Id';
-                              }
-                              else if (!EmailValidator.validate(s)) {
+                              } else if (!EmailValidator.validate(s)) {
                                 return 'Invalid email.';
                               }
                               return null;
@@ -125,12 +162,18 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            color: Colors.blue,
+                            color: isLoading ? Colors.grey : Colors.blue,
                             child: Text(
-                              'Register',
-                              style: TextStyle(color: Colors.white),
+                              isLoading ? 'Registering' : 'Register',
+                              style: TextStyle(
+                                  color: (isLoading)
+                                      ? Colors.black
+                                      : Colors.white),
                             ),
                             onPressed: () async {
+                              if (isLoading) {
+                                return;
+                              }
                               await register(context);
                             },
                           ),
@@ -183,22 +226,24 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState.validate()) {
       String s = await MyAuthClass.registerEmail(
           context, _emailController.text, _passwordController.text);
-      if (s == 'success') {
-        addBoolToSF(true);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              //builder: (context) => VerifyEmail(email: _emailController.text,),
-              builder: (context) => FeedPage(),
-            ),
-        );
-      }
-      else if (s != null) {
+      if (s == 'The password provided is too weak.' || s=='The account already exists for that email.') {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(s),
         ));
       }
-      else{
+      else if (s != null) {
+        addBoolToSF(true);
+        setState(() {
+          isLoading = true;
+        });
+        MyDBClass.addUserInfo(s,_emailController.text, _usernameController.text);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                //builder: (context) => VerifyEmail(email: _emailController.text,),
+                builder: (context) => MyHomePage()),
+            (route) => false);
+      } else{
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Some error occurred.'),
         ));

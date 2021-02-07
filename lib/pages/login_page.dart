@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:instagram_clone/pages/feed_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/pages/register_page.dart';
 import 'package:instagram_clone/pages/verify_email.dart';
 import 'package:instagram_clone/services/my_auth_class.dart';
@@ -13,11 +14,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  bool isObscure = true;
+  GlobalKey<FormState> _formKey;
+  GlobalKey<ScaffoldState> _scaffoldKey;
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
+  bool isObscure;
+  bool isLoading;
+
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+    _scaffoldKey = new GlobalKey<ScaffoldState>();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    isObscure = true;
+    isLoading = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +129,15 @@ class _LoginPageState extends State<LoginPage> {
                           child: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            color: Colors.blue,
+                            color: isLoading ? Colors.grey : Colors.blue,
                             child: Text(
-                              'Log In',
-                              style: TextStyle(color: Colors.white),
+                              (isLoading) ? 'Logging In' : 'Log In',
+                              style: TextStyle(color: isLoading ? Colors.black : Colors.white),
                             ),
                             onPressed: () async {
+                              if(isLoading){
+                                return ;
+                              }
                               await login(context);
                             },
                           ),
@@ -173,6 +189,9 @@ class _LoginPageState extends State<LoginPage> {
 
   login(BuildContext context) async {
     if (_formKey.currentState.validate()) {
+      setState(() {
+        isLoading=true;
+      });
       String s = await MyAuthClass.signInEmail(
           context, _emailController.text, _passwordController.text);
       //print(s);
@@ -190,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => FeedPage(),
+            builder: (context) => MyHomePage(),
           ),
         );
       } else if (s != null) {

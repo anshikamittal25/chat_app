@@ -5,18 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:instagram_clone/pages/landing_page.dart';
 
 void main() {
-  
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Instagram',
+    theme: ThemeData(
+      //primaryColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: AppBarTheme(color: Colors.white,elevation: 0,),
+    ),
     home: LandingPage(),
   ));
 }
-

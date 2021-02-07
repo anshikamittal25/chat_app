@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/pages/profile_page.dart';
-import 'package:instagram_clone/pages/search_page.dart';
-import 'package:instagram_clone/pages/create_post_page.dart';
-import 'package:instagram_clone/pages/feed_page.dart';
-import 'package:instagram_clone/pages/notif_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/profile_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/search_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/create_post_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
+import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/notif_page.dart';
+import 'package:instagram_clone/data/my_info.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -13,10 +16,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex=0;
+  String uid = FirebaseAuth.instance.currentUser.uid;
+  DocumentSnapshot doc;
+  bool isLoading;
+
+  @override
+  void initState() {
+    isLoading=true;
+    prepare();
+    super.initState();
+  }
+
+  void prepare() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) {
+      doc = value;
+    }).catchError((e) {
+      print(e);
+    });
+    print(doc.data().toString());
+    MyInfo.myInfo=doc.data();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return (isLoading)
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Scaffold(
       backgroundColor: Colors.white,
       body: chooseWidget(),
       /*bottomNavigationBar: TabBar(
