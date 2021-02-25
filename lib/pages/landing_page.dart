@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/pages/login_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/my_home_page.dart';
+import 'package:instagram_clone/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/services/shared_pref.dart';
 
 class LandingPage extends StatefulWidget {

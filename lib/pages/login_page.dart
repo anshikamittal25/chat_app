@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/my_home_page.dart';
+import 'package:instagram_clone/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/pages/register_page.dart';
-import 'package:instagram_clone/pages/verify_email.dart';
 import 'package:instagram_clone/services/my_auth_class.dart';
 import 'package:instagram_clone/services/shared_pref.dart';
 
@@ -216,11 +214,17 @@ class _LoginPageState extends State<LoginPage> {
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(s),
         ));
+        setState(() {
+          isLoading=false;
+        });
       }
     } else {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Some error occurred.'),
       ));
+      setState(() {
+        isLoading=false;
+      });
     }
   }
 }

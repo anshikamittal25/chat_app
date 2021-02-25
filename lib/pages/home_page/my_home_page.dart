@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/profile_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/search_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/create_post_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/notif_page.dart';
+import 'package:instagram_clone/pages/home_page/profile_page.dart';
+import 'package:instagram_clone/pages/home_page/search_page.dart';
+import 'package:instagram_clone/pages/home_page/create_post_page.dart';
+import 'package:instagram_clone/pages/home_page/feed_page.dart';
+import 'package:instagram_clone/pages/home_page/notif_page.dart';
 import 'package:instagram_clone/data/my_info.dart';
 
 class MyHomePage extends StatefulWidget {

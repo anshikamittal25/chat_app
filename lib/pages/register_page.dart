@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/feed_page.dart';
-import 'file:///C:/Users/lenovo/AndroidStudioProjects/instagram_clone/lib/pages/home_page/my_home_page.dart';
-import 'package:instagram_clone/pages/verify_email.dart';
+import 'package:instagram_clone/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/services/my_auth_class.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
@@ -71,48 +69,42 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20.0, 10, 20, 10),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height / 20,
-                          child: TextFormField(
-                            controller: _usernameController,
-                            validator: (s) {
-                              if (s.isEmpty) {
-                                return 'Please enter an username';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              hintText: 'UserName',
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(width: 1, color: Colors.grey)),
-                            ),
+                        child: TextFormField(
+                          controller: _usernameController,
+                          validator: (s) {
+                            if (s.isEmpty) {
+                              return 'Please enter an username';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10.0),
+                            hintText: 'UserName',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.grey)),
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20.0, 10, 20, 10),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height / 20,
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: _emailController,
-                            validator: (s) {
-                              if (s.isEmpty) {
-                                return 'Please enter Email Id';
-                              } else if (!EmailValidator.validate(s)) {
-                                return 'Invalid email.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              hintText: 'Email',
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(width: 1, color: Colors.grey)),
-                            ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          validator: (s) {
+                            if (s.isEmpty) {
+                              return 'Please enter Email Id';
+                            } else if (!EmailValidator.validate(s)) {
+                              return 'Invalid email.';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10.0),
+                            hintText: 'Email',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.grey)),
                           ),
                         ),
                       ),
