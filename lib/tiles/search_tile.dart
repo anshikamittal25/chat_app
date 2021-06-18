@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/data/my_info.dart';
-import 'package:instagram_clone/models/user.dart';
+import 'package:instagram_clone/data/data.dart';
+import 'package:instagram_clone/models/my_user.dart';
 import 'package:instagram_clone/pages/message_screen/chat_room.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 
@@ -12,7 +13,7 @@ class SearchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe=(user.userName==MyInfo.myInfo['username']);
+    bool isMe=(user.uid==FirebaseAuth.instance.currentUser.uid);
       return Container(
         padding: EdgeInsets.all(8),
         child: Row(
@@ -21,7 +22,7 @@ class SearchTile extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  user.userName,
+                  user.username,
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
@@ -45,7 +46,7 @@ class SearchTile extends StatelessWidget {
                   return;
                 }
                 else {
-                  MyDBClass.createChatRoom(user.userName);
+                  MyDBClass.createChatRoom(user.uid);
                   Navigator.pushReplacement(context, MaterialPageRoute(
                       builder: (context) => ChatRoom(user: user)));
                 }

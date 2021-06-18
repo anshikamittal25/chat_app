@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +6,8 @@ import 'package:instagram_clone/pages/home_page/my_home_page.dart';
 import 'package:instagram_clone/pages/register_page.dart';
 import 'package:instagram_clone/services/my_auth_class.dart';
 import 'package:instagram_clone/services/shared_pref.dart';
+
+import '../services/my_db_class.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -130,11 +133,13 @@ class _LoginPageState extends State<LoginPage> {
                             color: isLoading ? Colors.grey : Colors.blue,
                             child: Text(
                               (isLoading) ? 'Logging In' : 'Log In',
-                              style: TextStyle(color: isLoading ? Colors.black : Colors.white),
+                              style: TextStyle(
+                                  color:
+                                      isLoading ? Colors.black : Colors.white),
                             ),
                             onPressed: () async {
-                              if(isLoading){
-                                return ;
+                              if (isLoading) {
+                                return;
                               }
                               await login(context);
                             },
@@ -188,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
   login(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
-        isLoading=true;
+        isLoading = true;
       });
       String s = await MyAuthClass.signInEmail(
           context, _emailController.text, _passwordController.text);
@@ -203,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       else*/
       if (s == 'success') {
-        addBoolToSF(true);
+        //addBoolToSF('isUserSignedIn', true);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -215,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
           content: Text(s),
         ));
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
       }
     } else {
@@ -223,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
         content: Text('Some error occurred.'),
       ));
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
     }
   }

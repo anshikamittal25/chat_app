@@ -7,25 +7,25 @@ import 'package:instagram_clone/models/my_user.dart';
 import 'package:instagram_clone/services/getChatRoomID.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:instagram_clone/tiles/message_tile.dart';
+import 'package:instagram_clone/tiles/shoutout_message_tile.dart';
 
-class ChatRoom extends StatefulWidget {
-  final MyUser user;
+class ShoutOutChatRoom extends StatefulWidget {
+  final String category;
 
-  ChatRoom({Key key, this.user}) : super(key: key);
+  ShoutOutChatRoom({Key key, this.category}) : super(key: key);
 
   @override
-  _ChatRoomState createState() => _ChatRoomState();
+  _ShoutOutChatRoomState createState() => _ShoutOutChatRoomState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
-  String myUid = FirebaseAuth.instance.currentUser.uid;
+class _ShoutOutChatRoomState extends State<ShoutOutChatRoom> {
   TextEditingController _text = TextEditingController();
   Stream msgStream;
 
   @override
   void initState() {
     setState(() {
-      msgStream = MyDBClass.getMessages(widget.user.uid);
+      msgStream = MyDBClass.getShoutOut(widget.category);
     });
     super.initState();
   }
@@ -43,21 +43,9 @@ class _ChatRoomState extends State<ChatRoom> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(widget.user.userPic),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              widget.user.username,
-              style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-          ],
+        title: Text(
+          widget.category,
+          style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
       body: Container(
@@ -73,7 +61,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         child: ListView.builder(
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
-                              return MessageTile(
+                              return ShoutOutMessageTile(
                                   map: snapshot.data.docs[index].data());
                             }),
                       );
@@ -116,7 +104,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   void sendMessage() {
     if (_text.text != '') {
-      MyDBClass.addChats(_text.text, widget.user.uid);
+      MyDBClass.addShoutOut(_text.text, widget.category);
       _text.text = '';
     }
   }

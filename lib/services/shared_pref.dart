@@ -1,12 +1,12 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-addBoolToSF(bool b) async {
+addBoolToSF(String s,bool b) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setBool('isUserSignedIn', b);
+  prefs.setBool(s, b);
 }
 
-getBoolValuesSF() async {
+getBoolValuesSF(String s) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isUserSignedIn = prefs.getBool('isUserSignedIn');
+  bool isUserSignedIn = prefs.getBool(s);
   return isUserSignedIn;
 }

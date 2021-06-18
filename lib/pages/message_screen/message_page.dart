@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/data/my_info.dart';
-import 'package:instagram_clone/models/user.dart';
+import 'package:instagram_clone/data/data.dart';
 import 'package:instagram_clone/pages/message_screen/searches.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
-import 'package:instagram_clone/tiles/chat_tile.dart';
+import 'package:instagram_clone/tiles/user_tile.dart';
 
 class MessagePage extends StatefulWidget {
   @override
@@ -27,11 +27,20 @@ class _MessagePageState extends State<MessagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         centerTitle: true,
         elevation: 0,
         title: Text(
           'Chats',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold, color: Colors.black),
         ),
         actions: [
           IconButton(
@@ -56,9 +65,9 @@ class _MessagePageState extends State<MessagePage> {
                   itemBuilder: (context, index) {
                     var arr =
                         snapshot.data.docs[index].data()['users'];
-                    String valUsername =
-                        (arr[0] == MyInfo.myInfo['username']) ? arr[1] : arr[0];
-                    return ChatTile(username:valUsername);
+                    String uid =
+                        (arr[0] == FirebaseAuth.instance.currentUser.uid) ? arr[1] : arr[0];
+                    return UserTile(uid: uid);
                   });
         },
       ),

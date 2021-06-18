@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/data/feed_posts.dart';
+import 'package:instagram_clone/models/post_model.dart';
 import 'package:instagram_clone/pages/message_screen/message_page.dart';
+import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:instagram_clone/tiles/post_tile.dart';
 
 class FeedPage extends StatefulWidget {
@@ -33,8 +35,9 @@ class _FeedPageState extends State<FeedPage> {
         ),
         actions: [
           GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>MessagePage()));
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MessagePage()));
             },
             child: Padding(
               padding: const EdgeInsets.all(15.0),
@@ -46,7 +49,35 @@ class _FeedPageState extends State<FeedPage> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: FutureBuilder<QuerySnapshot>(
+        future: MyDBClass.getPostsFeed(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Something went wrong!'));
+          }
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            return (snapshot.data.docs.length == 0)
+                ? Center(
+                  child: Text('No posts found!'),
+                )
+                : ListView.builder(
+                    itemBuilder: (context, index) {
+                      Post post = Post.fromJson(snapshot.data.docs[index].data(),snapshot.data.docs[index].id);
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: PostTile(post: post),
+                      );
+                    },
+                    itemCount: snapshot.data.docs.length,
+                  );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
+      /*(isLoading)?CircularProgressIndicator():ListView.builder(
               itemCount: feedPosts.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
@@ -54,7 +85,8 @@ class _FeedPageState extends State<FeedPage> {
                   child: PostTile(post: feedPosts[index]),
                 );
               },
-            ),
+            ),*/
     );
   }
+
 }

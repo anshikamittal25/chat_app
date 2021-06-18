@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/models/user.dart';
+import 'package:instagram_clone/models/my_user.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:instagram_clone/tiles/search_tile.dart';
 
@@ -17,7 +17,7 @@ class _SearchesState extends State<Searches> {
 
   @override
   void initState() {
-    isSearched=false;
+    isSearched = false;
     super.initState();
   }
 
@@ -45,7 +45,7 @@ class _SearchesState extends State<Searches> {
                   ),
                   onPressed: () {
                     setState(() {
-                      isSearched=true;
+                      isSearched = true;
                     });
                   },
                 ),
@@ -69,10 +69,9 @@ class _SearchesState extends State<Searches> {
                       : ListView.builder(
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            Map<String, dynamic> m =
-                                (snapshot.data.docs[index].data());
-                            return SearchTile(user: MyUser(
-                                userName: m['username'], email: m['email']));
+                            var doc = snapshot.data.docs[index];
+                            MyUser user = MyUser.fromJson(doc.data(), doc.id);
+                            return SearchTile(user: user);
                           },
                           itemCount: snapshot.data.docs.length,
                         );
