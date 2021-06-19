@@ -68,6 +68,7 @@ class MyDBClass {
           'time': formattedTime,
           'date': formattedDate,
           'likes': 0,
+      'whoLiked':[],
           'category': category.toLowerCase()
         })
         .then((value) => print("Post Added"))
@@ -94,7 +95,7 @@ class MyDBClass {
     FirebaseFirestore.instance
         .collection('posts')
         .doc(id)
-        .set(data)
+        .update(data)
         .then((value) => print("Post updated"))
         .catchError((error) => print("Failed to update post: $error"));
   }

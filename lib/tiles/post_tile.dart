@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/post_model.dart';
@@ -18,13 +19,20 @@ class _PostTileState extends State<PostTile> {
   final Post post;
   _PostTileState({this.post});
   bool isLiked = false;
+  String username;
+  String userPic;
+  String uid;
+  List urls;
+  String description;
+  String time;
+  String date;
+  List<dynamic> whoLiked;
   //List<Map<String, dynamic>> _controllers = [];
   //List<Map<String, dynamic>> _initializeVideoPlayerFutures = [];
 
-  /*
   @override
   void initState() {
-    var i = 0;
+    /*var i = 0;
     post.urls.forEach((url) {
       if (url['type'] == 'video') {
         _controllers.add({
@@ -37,10 +45,31 @@ class _PostTileState extends State<PostTile> {
             {'index': i, 'value': _controllers.last['value'].initialize()});
       }
       i++;
+    });*/
+    uid = post.uid;
+    urls = post.urls;
+    description = post.description;
+    time = post.time;
+    date = post.date;
+    whoLiked = post.whoLiked;
+
+    setState(() {
+      isLiked = whoLiked.contains(FirebaseAuth.instance.currentUser.uid);
     });
+
+    _userInfo();
+
     super.initState();
   }
 
+  _userInfo() async {
+    var user = await MyDBClass.getUserData(post.uid);
+    setState(() {
+      userPic = user['userPic'];
+      username = user['username'];
+    });
+  }
+/*
   @override
   void dispose() {
     // Ensure disposing of the VideoPlayerController to free up resources.
@@ -54,61 +83,49 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String uid = post.uid;
-    List urls = post.urls;
-    int likes = post.likes;
-    String description = post.description;
-    String time = post.time;
-    String date = post.date;
-
-    return FutureBuilder<DocumentSnapshot>(
-      future: MyDBClass.getUserData(uid),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text('Something went wrong!'));
-        }
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          var user = snapshot.data;
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                (userPic != null)
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(userPic),
+                      )
+                    : Container(),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(user['userPic']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          user['username'],
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black),
-                        ),
-                      ),
-                      Spacer(
-                        flex: 1,
-                      ),
-                      Icon(Icons.more_vert),
-                    ],
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    username ?? ' ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.black),
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.width / 1.5,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: urls.length,
-                      itemBuilder: (context, index) {
-                        return (urls[index]['type'] == 'image')
-                            ? Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Image.network(urls[index]['file']))
-                            : Container(
+                Spacer(
+                  flex: 1,
+                ),
+                Icon(Icons.more_vert),
+              ],
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.width / 1.5,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: urls.length,
+                itemBuilder: (context, index) {
+                  return (urls[index]['type'] == 'image')
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Image.network(urls[index]['file']))
+                      : Container(
 /*width: MediaQuery.of(context).size.width,
                           child: GestureDetector(
                             onTap: () {
@@ -156,84 +173,85 @@ class _PostTileState extends State<PostTile> {
                               },
                             ),
                           ),*/
-                        );
-                      }),
+                          );
+                }),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(
+                  (isLiked) ? Icons.favorite : Icons.favorite_border,
+                  color: (isLiked) ? Colors.red : Colors.black,
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        (isLiked) ? Icons.favorite : Icons.favorite_border,
-                        color: (isLiked) ? Colors.red : Colors.black,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (!isLiked) {
-                            likes++;
-                          } else {
-                            likes--;
-                          }
-                          isLiked = !isLiked;
-                        });
-
-                        MyDBClass.updatePostData(post.id, {'likes': likes});
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.insert_comment_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.send_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Spacer(
-                      flex: 1,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.bookmark_border,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
+                onPressed: () {
+                  setState(() {
+                    if (!isLiked) {
+                      post.likes++;
+                      post.whoLiked.add(FirebaseAuth.instance.currentUser.uid);
+                      MyDBClass.updatePostData(post.id,
+                          {'likes': post.likes, 'whoLiked': post.whoLiked});
+                    } else {
+                      post.likes--;
+                      post.whoLiked
+                          .remove(FirebaseAuth.instance.currentUser.uid);
+                      MyDBClass.updatePostData(post.id,
+                          {'likes': post.likes, 'whoLiked': post.whoLiked});
+                    }
+                    isLiked = !isLiked;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.insert_comment_outlined,
+                  color: Colors.black,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                  child: Text(
-                    '$likes likes',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.send_outlined,
+                  color: Colors.black,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${user['username']} ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(description),
-                    ],
-                  ),
+              ),
+              Spacer(
+                flex: 1,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.bookmark_border,
+                  color: Colors.black,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                  child: Text(
-                    '$date $time',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+            child: Text(
+              '${post.likes} likes',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Text(
+                  '$username ',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
+                Text(description),
               ],
             ),
-          );
-        }
-        return Container();
-      },
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+            child: Text(
+              '$date $time',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

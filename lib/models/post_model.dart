@@ -9,8 +9,9 @@ class Post{
   int timeStamp;
   String date;
   String category;
+  List<dynamic> whoLiked;
 
-  Post({this.id,this.uid,this.urls,this.likes,this.description,this.time,this.date,this.category,this.timeStamp});
+  Post({this.id,this.uid,this.urls,this.likes,this.description,this.time,this.whoLiked,this.date,this.category,this.timeStamp});
 
   factory Post.fromJson(Map<String,dynamic> json,String id){
     return Post(
@@ -23,6 +24,7 @@ class Post{
       time: json['time'],
       timeStamp: json['timeStamp'],
       category: json['category'],
+      whoLiked: json['whoLiked'],
     );
   }
 
@@ -36,6 +38,7 @@ class Post{
       'time': time,
       'timeStamp': timeStamp,
       'category': category,
+      'whoLiked': whoLiked,
     };
   }
 
