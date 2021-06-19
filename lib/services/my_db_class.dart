@@ -27,6 +27,20 @@ class MyDBClass {
         .catchError((error) => print("Failed to add user: $error"));
   }
 
+  static updateUserInfo(String name, String bio, String image) {
+    final User user = FirebaseAuth.instance.currentUser;
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .update({
+          'name': name,
+          'bio': bio ?? '',
+          'userPic': image,
+        })
+        .then((value) => print("User updated"))
+        .catchError((error) => print("Failed to update user: $error"));
+  }
+
   static Future getUserData(String uid) {
     return FirebaseFirestore.instance.collection('users').doc(uid).get();
   }
@@ -44,23 +58,19 @@ class MyDBClass {
     String formattedTime = DateFormat('kk:mm').format(now);
     String formattedDate = DateFormat('EEE d MMM').format(now);
     final User user = FirebaseAuth.instance.currentUser;
-    getUserData(user.uid)
-        .then((value) => FirebaseFirestore.instance
-            .collection('posts')
-            .add({
-              'uid': user.uid,
-              'username': value.data()['username'],
-              'userPic': value.data()['userPic'],
-              'urls': posts,
-              'description': des,
-              'timeStamp': now.millisecondsSinceEpoch,
-              'time': formattedTime,
-              'date': formattedDate,
-              'likes': 0,
-              'category': category.toLowerCase()
-            })
-            .then((value) => print("Post Added"))
-            .catchError((error) => print("Failed to add post: $error")))
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add({
+          'uid': user.uid,
+          'urls': posts,
+          'description': des,
+          'timeStamp': now.millisecondsSinceEpoch,
+          'time': formattedTime,
+          'date': formattedDate,
+          'likes': 0,
+          'category': category.toLowerCase()
+        })
+        .then((value) => print("Post Added"))
         .catchError((error) => print("Failed to add post: $error"));
   }
 
@@ -145,22 +155,19 @@ class MyDBClass {
     String formattedTime = DateFormat('kk:mm').format(now);
     String formattedDate = DateFormat('EEE d MMM').format(now);
     final User user = FirebaseAuth.instance.currentUser;
-    getUserData(user.uid).then((value) => FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('chatrooms')
         .doc(category)
         .collection('chats')
         .add({
           'message': msg,
           'uid': user.uid,
-          'username': value.data()['username'],
-          'userPic': value.data()['userPic'],
           'time': formattedTime,
           'date': formattedDate,
           'timeStamp': now.millisecondsSinceEpoch,
         })
         .then((value) => print("Msg sent"))
-        .catchError((error) => print("Failed to send msg: $error"))
-        .catchError((error) => print("Failed to send msg: $error")));
+        .catchError((error) => print("Failed to send msg: $error"));
   }
 
   static getChatRooms() {

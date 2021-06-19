@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ? ('assets/icons/eye-off-outline.svg')
                                         : ('assets/icons/eye-outline.svg'),
                                     color:
-                                        (isObscure) ? Colors.grey : Colors.blue,
+                                        (isObscure) ? Colors.grey : Colors.pink[900],
                                   ),
                                   onPressed: () {
                                     setState(() {
@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            color: isLoading ? Colors.grey : Colors.blue,
+                            color: isLoading ? Colors.grey : Colors.pink[900],
                             child: Text(
                               (isLoading) ? 'Logging In' : 'Log In',
                               style: TextStyle(

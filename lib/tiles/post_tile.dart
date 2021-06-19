@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/post_model.dart';
@@ -53,53 +54,62 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String userName = post.username;
-    String userPic = post.userPic;
+    String uid = post.uid;
     List urls = post.urls;
     int likes = post.likes;
     String description = post.description;
     String time = post.time;
     String date = post.date;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return FutureBuilder<DocumentSnapshot>(
+      future: MyDBClass.getUserData(uid),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Something went wrong!'));
+        }
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          var user = snapshot.data;
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(userPic),
-                ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    userName,
-                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black),
+                  padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(user['userPic']),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          user['username'],
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.black),
+                        ),
+                      ),
+                      Spacer(
+                        flex: 1,
+                      ),
+                      Icon(Icons.more_vert),
+                    ],
                   ),
                 ),
-                Spacer(
-                  flex: 1,
-                ),
-                Icon(Icons.more_vert),
-              ],
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.width / 1.5,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: urls.length,
-                itemBuilder: (context, index) {
-                  return (urls[index]['type'] == 'image')
-                      ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.network(urls[index]['file']))
-                      : Container(
-                          /*width: MediaQuery.of(context).size.width,
+                Container(
+                  height: MediaQuery.of(context).size.width / 1.5,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: urls.length,
+                      itemBuilder: (context, index) {
+                        return (urls[index]['type'] == 'image')
+                            ? Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Image.network(urls[index]['file']))
+                            : Container(
+/*width: MediaQuery.of(context).size.width,
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
@@ -147,79 +157,83 @@ class _PostTileState extends State<PostTile> {
                             ),
                           ),*/
                         );
-                }),
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  (isLiked) ? Icons.favorite : Icons.favorite_border,
-                  color: (isLiked) ? Colors.red : Colors.black,
+                      }),
                 ),
-                onPressed: () {
-                  setState(() {
-                    if (!isLiked) {
-                      likes++;
-                    } else {
-                      likes--;
-                    }
-                    isLiked = !isLiked;
-                  });
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        (isLiked) ? Icons.favorite : Icons.favorite_border,
+                        color: (isLiked) ? Colors.red : Colors.black,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (!isLiked) {
+                            likes++;
+                          } else {
+                            likes--;
+                          }
+                          isLiked = !isLiked;
+                        });
 
-                  MyDBClass.updatePostData(post.id, {'likes': likes});
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.insert_comment_outlined,
-                  color: Colors.black,
+                        MyDBClass.updatePostData(post.id, {'likes': likes});
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.insert_comment_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.send_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.bookmark_border,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.send_outlined,
-                  color: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                  child: Text(
+                    '$likes likes',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Spacer(
-                flex: 1,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.bookmark_border,
-                  color: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${user['username']} ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(description),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-            child: Text(
-              '$likes likes',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  '$userName ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+                  child: Text(
+                    '$date $time',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ),
-                Text(description),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-            child: Text(
-              '$date $time',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
-            ),
-          ),
-        ],
-      ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

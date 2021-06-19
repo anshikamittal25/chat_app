@@ -44,11 +44,11 @@ class _CategoryPageState extends State<CategoryPage> {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
-                        color: Colors.black,
+                        color: Colors.white,
                         fontStyle: FontStyle.italic),
                   )),
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Colors.pink[900],
                       borderRadius: BorderRadius.circular(40)),
                 ),
               ),

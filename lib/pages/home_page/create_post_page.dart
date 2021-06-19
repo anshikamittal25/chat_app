@@ -102,7 +102,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               children: [
                                 Icon(
                                   Icons.add_a_photo_outlined,
-                                  color: Colors.blue[400],
+                                  color: Colors.pink[300],
                                 ),
                                 SizedBox(
                                   height: 4,
@@ -122,7 +122,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                             ),
                           ),
                         ),
-                        Spacer(
+                        /*Spacer(
                           flex: 3,
                         ),
                         GestureDetector(
@@ -132,7 +132,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                 content: Text('Can\'t add more than 5 items'),
                               ));
                             } else {
-                              selectVideo();
+                              //selectVideo();
                             }
                           },
                           child: Container(
@@ -143,7 +143,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               children: [
                                 Icon(
                                   Icons.video_library_outlined,
-                                  color: Colors.blue[400],
+                                  color: Colors.pink[300],
                                 ),
                                 SizedBox(
                                   height: 4,
@@ -162,7 +162,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                   BorderRadius.all(Radius.circular(20)),
                             ),
                           ),
-                        ),
+                        ),*/
                         Spacer(
                           flex: 5,
                         ),
@@ -236,7 +236,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        color: isLoading ? Colors.grey : Colors.blue,
+                        color: isLoading ? Colors.grey : Colors.pink[900],
                         child: Text(
                           isLoading ? 'Uploading' : 'Upload',
                           style: TextStyle(
@@ -302,7 +302,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 },
               ),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.pink[900],
                 shape: BoxShape.circle,
               ),
             ),

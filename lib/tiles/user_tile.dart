@@ -52,7 +52,7 @@ class _UserTileState extends State<UserTile> {
                   ),
                   Text(
                     user.name,
-                    style: TextStyle(fontSize: 30),
+                    style: TextStyle(fontSize: 23),
                   ),
                 ],
               ),

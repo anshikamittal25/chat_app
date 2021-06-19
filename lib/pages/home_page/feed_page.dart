@@ -29,10 +29,6 @@ class _FeedPageState extends State<FeedPage> {
               color: Colors.black, fontFamily: 'Pattaya', fontSize: 30),
         ),
         elevation: 0,
-        leading: Icon(
-          Icons.add_box_outlined,
-          color: Colors.black,
-        ),
         actions: [
           GestureDetector(
             onTap: () {

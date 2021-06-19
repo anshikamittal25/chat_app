@@ -14,7 +14,6 @@ void main() {
     debugShowCheckedModeBanner: false,
     title: 'Instagram',
     theme: ThemeData(
-      //primaryColor: Colors.white,
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(color: Colors.white,elevation: 0,),
     ),

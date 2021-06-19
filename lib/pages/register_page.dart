@@ -186,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            color: isLoading ? Colors.grey : Colors.blue,
+                            color: isLoading ? Colors.grey : Colors.pink[900],
                             child: Text(
                               isLoading ? 'Registering' : 'Register',
                               style: TextStyle(
@@ -293,7 +293,7 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             ),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.pink[900],
               shape: BoxShape.circle,
             ),
           ),

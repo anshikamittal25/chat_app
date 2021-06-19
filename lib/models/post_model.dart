@@ -2,8 +2,6 @@ class Post{
 
   String id;
   String uid;
-  String username;
-  String userPic;
   List urls;
   int likes;
   String description;
@@ -12,7 +10,7 @@ class Post{
   String date;
   String category;
 
-  Post({this.id,this.uid,this.urls,this.likes,this.description,this.time,this.date,this.category,this.username,this.timeStamp,this.userPic});
+  Post({this.id,this.uid,this.urls,this.likes,this.description,this.time,this.date,this.category,this.timeStamp});
 
   factory Post.fromJson(Map<String,dynamic> json,String id){
     return Post(
@@ -25,8 +23,6 @@ class Post{
       time: json['time'],
       timeStamp: json['timeStamp'],
       category: json['category'],
-      username: json['username'],
-      userPic: json['userPic'],
     );
   }
 
@@ -40,8 +36,6 @@ class Post{
       'time': time,
       'timeStamp': timeStamp,
       'category': category,
-      'username': username,
-      'userPic': userPic,
     };
   }
 
