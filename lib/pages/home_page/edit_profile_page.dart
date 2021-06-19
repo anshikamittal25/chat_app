@@ -127,7 +127,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           child: FlatButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-                            color: isLoading ? Colors.grey : Colors.pink[900],
+                            color: isLoading ? Colors.grey : Colors.purple,
                             child: Text(
                               isLoading ? 'Updating' : 'Update',
                               style: TextStyle(
@@ -188,7 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
             ),
             decoration: BoxDecoration(
-              color: Colors.pink[900],
+              color: Colors.purple,
               shape: BoxShape.circle,
             ),
           ),

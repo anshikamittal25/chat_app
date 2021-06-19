@@ -102,7 +102,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               children: [
                                 Icon(
                                   Icons.add_a_photo_outlined,
-                                  color: Colors.pink[300],
+                                  color: Colors.purple[300],
                                 ),
                                 SizedBox(
                                   height: 4,
@@ -143,7 +143,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               children: [
                                 Icon(
                                   Icons.video_library_outlined,
-                                  color: Colors.pink[300],
+                                  color: Colors.purple[300],
                                 ),
                                 SizedBox(
                                   height: 4,
@@ -236,7 +236,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
-                        color: isLoading ? Colors.grey : Colors.pink[900],
+                        color: isLoading ? Colors.grey : Colors.purple,
                         child: Text(
                           isLoading ? 'Uploading' : 'Upload',
                           style: TextStyle(
@@ -302,7 +302,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 },
               ),
               decoration: BoxDecoration(
-                color: Colors.pink[900],
+                color: Colors.purple,
                 shape: BoxShape.circle,
               ),
             ),

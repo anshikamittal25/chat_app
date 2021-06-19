@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: FlatButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      color: Colors.pink[900],
+                      color: Colors.purple,
                       child: Text(
                         'Edit Profile',
                         style: TextStyle(color: Colors.white),

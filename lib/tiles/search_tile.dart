@@ -36,7 +36,7 @@ class SearchTile extends StatelessWidget {
             ),
             FlatButton(
               textColor: Colors.white,
-              color: (isMe)?Colors.grey[400]:Colors.pink[800],
+              color: (isMe)?Colors.grey[400]:Colors.purple,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),

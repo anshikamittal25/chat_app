@@ -41,7 +41,7 @@ class _CategoryPostPageState extends State<CategoryPostPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink[900],
+        backgroundColor: Colors.purple,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset('assets/icons/megaphone.svg',color: Colors.white,),

@@ -29,7 +29,7 @@ class ShoutOutMessageTile extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.pink[900],
+                color: Colors.purple,
               ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(

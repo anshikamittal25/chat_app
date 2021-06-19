@@ -48,7 +48,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         fontStyle: FontStyle.italic),
                   )),
                   decoration: BoxDecoration(
-                      color: Colors.pink[900],
+                      color: Colors.purple,
                       borderRadius: BorderRadius.circular(40)),
                 ),
               ),

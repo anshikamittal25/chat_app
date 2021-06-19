@@ -35,7 +35,7 @@ class MessageTile extends StatelessWidget {
                           topRight: Radius.circular(10),
                           bottomRight: Radius.circular(10),
                         ),
-                  color: byMe ? Colors.blue[800] : Colors.pink[900]),
+                  color: byMe ? Colors.purple : Colors.black87),
               padding: EdgeInsets.all(10),
               child: Column(
                 children: [
