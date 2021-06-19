@@ -111,7 +111,10 @@ class _PostTileState extends State<PostTile> {
                 Spacer(
                   flex: 1,
                 ),
-                Icon(Icons.more_vert),
+                Text(
+                  '$date $time',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
               ],
             ),
           ),
@@ -176,78 +179,50 @@ class _PostTileState extends State<PostTile> {
                           );
                 }),
           ),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  (isLiked) ? Icons.favorite : Icons.favorite_border,
-                  color: (isLiked) ? Colors.red : Colors.black,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (!isLiked) {
-                      post.likes++;
-                      post.whoLiked.add(FirebaseAuth.instance.currentUser.uid);
-                      MyDBClass.updatePostData(post.id,
-                          {'likes': post.likes, 'whoLiked': post.whoLiked});
-                    } else {
-                      post.likes--;
-                      post.whoLiked
-                          .remove(FirebaseAuth.instance.currentUser.uid);
-                      MyDBClass.updatePostData(post.id,
-                          {'likes': post.likes, 'whoLiked': post.whoLiked});
-                    }
-                    isLiked = !isLiked;
-                  });
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.insert_comment_outlined,
-                  color: Colors.black,
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.send_outlined,
-                  color: Colors.black,
-                ),
-              ),
-              Spacer(
-                flex: 1,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.bookmark_border,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
+
           Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-            child: Text(
-              '${post.likes} likes',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 14),
+            child: Text(description,style: TextStyle(color: Colors.black, fontSize: 15),),
           ),
+
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  '$username ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(horizontal:30.0),
+            child: GestureDetector(
+              onTap: (){
+                setState(() {
+                  if (!isLiked) {
+                    post.likes++;
+                    post.whoLiked.add(FirebaseAuth.instance.currentUser.uid);
+                    MyDBClass.updatePostData(post.id,
+                        {'likes': post.likes, 'whoLiked': post.whoLiked});
+                  } else {
+                    post.likes--;
+                    post.whoLiked
+                        .remove(FirebaseAuth.instance.currentUser.uid);
+                    MyDBClass.updatePostData(post.id,
+                        {'likes': post.likes, 'whoLiked': post.whoLiked});
+                  }
+                  isLiked = !isLiked;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      (isLiked) ? Icons.favorite : Icons.favorite_border,
+                      color: (isLiked) ? Colors.red : Colors.black,
+                    ),
+                    SizedBox(width: 5,),
+                    Text(
+                      '${post.likes} likes',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                Text(description),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-            child: Text(
-              '$date $time',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ),
           ),
         ],
