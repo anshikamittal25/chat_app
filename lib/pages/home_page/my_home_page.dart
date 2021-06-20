@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       /*case 3:
         return CategoryPostPage();*/
       case 3:
-        return ProfilePage();
+        return ProfilePage(fromHome:true,uid: FirebaseAuth.instance.currentUser.uid,);
       default:
         return FeedPage();
     }

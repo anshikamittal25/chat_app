@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:instagram_clone/data/data.dart';
+import 'package:instagram_clone/pages/home_page/profile_page.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 
 // ignore: must_be_immutable
@@ -35,20 +36,31 @@ class ShoutOutMessageTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(user['userPic']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          user['username'],
-                          style: TextStyle(fontSize: 18, color: Colors.white),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage(
+                                uid: snapshot.data.id,
+                                fromHome:false,
+                              )));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(user['userPic']),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            user['username'],
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 8, 0, 5),

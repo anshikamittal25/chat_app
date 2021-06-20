@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/post_model.dart';
+import 'package:instagram_clone/pages/home_page/profile_page.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:video_player/video_player.dart';
 
@@ -90,32 +91,43 @@ class _PostTileState extends State<PostTile> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                (userPic != null)
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(userPic),
-                      )
-                    : Container(),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    username ?? ' ',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.black),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                              uid: uid,
+                          fromHome:false,
+                            )));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  (userPic != null)
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(userPic),
+                        )
+                      : Container(),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      username ?? ' ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black),
+                    ),
                   ),
-                ),
-                Spacer(
-                  flex: 1,
-                ),
-                Text(
-                  '$date $time',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ],
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Text(
+                    '$date $time',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           ),
           Container(
@@ -179,16 +191,17 @@ class _PostTileState extends State<PostTile> {
                           );
                 }),
           ),
-
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 14),
-            child: Text(description,style: TextStyle(color: Colors.black, fontSize: 15),),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            child: Text(
+              description,
+              style: TextStyle(color: Colors.black, fontSize: 15),
+            ),
           ),
-
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal:30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 setState(() {
                   if (!isLiked) {
                     post.likes++;
@@ -197,8 +210,7 @@ class _PostTileState extends State<PostTile> {
                         {'likes': post.likes, 'whoLiked': post.whoLiked});
                   } else {
                     post.likes--;
-                    post.whoLiked
-                        .remove(FirebaseAuth.instance.currentUser.uid);
+                    post.whoLiked.remove(FirebaseAuth.instance.currentUser.uid);
                     MyDBClass.updatePostData(post.id,
                         {'likes': post.likes, 'whoLiked': post.whoLiked});
                   }
@@ -207,7 +219,9 @@ class _PostTileState extends State<PostTile> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(border: Border.all(color: Colors.black),borderRadius: BorderRadius.all(Radius.circular(10))),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -215,7 +229,9 @@ class _PostTileState extends State<PostTile> {
                       (isLiked) ? Icons.favorite : Icons.favorite_border,
                       color: (isLiked) ? Colors.red : Colors.black,
                     ),
-                    SizedBox(width: 5,),
+                    SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       '${post.likes} likes',
                       style: TextStyle(fontWeight: FontWeight.bold),

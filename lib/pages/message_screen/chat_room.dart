@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/data.dart';
 import 'package:instagram_clone/models/my_user.dart';
+import 'package:instagram_clone/pages/home_page/profile_page.dart';
 import 'package:instagram_clone/services/getChatRoomID.dart';
 import 'package:instagram_clone/services/my_db_class.dart';
 import 'package:instagram_clone/tiles/message_tile.dart';
@@ -43,21 +44,35 @@ class _ChatRoomState extends State<ChatRoom> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundImage: NetworkImage(widget.user.userPic),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              widget.user.username,
-              style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-          ],
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                      fromHome:false,
+                          uid: widget.user.uid,
+                        )));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundImage: NetworkImage(widget.user.userPic),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                widget.user.username,
+                style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ],
+          ),
         ),
       ),
       body: Container(

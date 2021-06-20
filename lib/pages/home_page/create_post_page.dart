@@ -246,6 +246,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                           if (isLoading) {
                             return;
                           }
+                          setState(() {
+                            isLoading = true;
+                          });
+
                           await upload(context);
                         },
                       ),

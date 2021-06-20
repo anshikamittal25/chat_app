@@ -19,13 +19,17 @@ import 'package:instagram_clone/tiles/post_tile.dart';
 import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
+  final String uid;
+  final bool fromHome;
+  ProfilePage({Key key,this.fromHome, this.uid}) : super(key: key);
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String uid = FirebaseAuth.instance.currentUser.uid;
+  String currentUid = FirebaseAuth.instance.currentUser.uid;
 
   @override
   void initState() {
@@ -35,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: MyDBClass.getUserData(uid),
+      future: MyDBClass.getUserData(widget.uid),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -55,43 +59,57 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontWeight: FontWeight.normal),
               ),
               elevation: 0,
+              leading: (!widget.fromHome)
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  : Container(),
               actions: [
-                GestureDetector(
-                  onTap: () {
-                    signOut(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Icon(
-                      Icons.logout,
-                      color: Colors.black,
+                if (widget.fromHome)
+                  GestureDetector(
+                    onTap: () {
+                      signOut(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(user['userPic']),
-                    ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(user['userPic']),
                   ),
-                  Text(
-                    user['name'],
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: Text(user['bio']),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.width / 8,),
+                ),
+                Text(
+                  user['name'],
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Text(user['bio']),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width / 8,
+                ),
+                if (widget.uid == currentUid)
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
                     child: FlatButton(
@@ -107,70 +125,74 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditProfilePage(
-                                        user:
-                                            MyUser.fromJson(user.data(), uid))))
+                                        user: MyUser.fromJson(
+                                            user.data(), widget.uid))))
                             .then((value) {
                           setState(() {});
                         });
                       },
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: Container(
+                    height: 1,
+                    color: Colors.grey,
+                    width: MediaQuery.of(context).size.width,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: Container(
-                      height: 1,
-                      color: Colors.grey,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                  ),
-                  FutureBuilder<QuerySnapshot>(
-                    future: MyDBClass.getPostsByFilter('uid', uid),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(child: Text('Something went wrong!'));
-                      }
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData) {
-                        return (snapshot.data.docs.length == 0)
-                            ? Center(
-                                child: Text('No posts found!'),
-                              )
-                            : GridView.builder(
-                                padding: const EdgeInsets.all(6),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2),
-                                itemBuilder: (context, index) {
-                                  Post post = Post.fromJson(
-                                      snapshot.data.docs[index].data(),
-                                      snapshot.data.docs[index].id);
-                                  return Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _showDialog(context, post);
-                                      },
-                                      child: Container(
-                                        child:
-                                            Image.network(post.urls[0]['file']),
+                ),
+                FutureBuilder<QuerySnapshot>(
+                  future: MyDBClass.getPostsByFilter('uid', widget.uid),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Something went wrong!'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData) {
+                      return (snapshot.data.docs.length == 0)
+                          ? Center(
+                              child: Text('No posts found!'),
+                            )
+                          : Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 40),
+                                child: GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2),
+                                  itemBuilder: (context, index) {
+                                    Post post = Post.fromJson(
+                                        snapshot.data.docs[index].data(),
+                                        snapshot.data.docs[index].id);
+                                    return Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          _showDialog(context, post);
+                                        },
+                                        child: Container(
+                                          child: Image.network(
+                                              post.urls[0]['file']),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                itemCount: snapshot.data.docs.length,
-                              );
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                                    );
+                                  },
+                                  itemCount: snapshot.data.docs.length,
+                                ),
+                              ),
+                            );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ],
             ),
           );
         }
