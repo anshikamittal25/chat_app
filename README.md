@@ -13,19 +13,28 @@ It is a Flutter application made for users to chat and interact with people havi
 
 ### Screenshots 
 
-Login <img src="readme_images/login.jpeg">
+#### Login 
+<img src="readme_images/login.jpeg">
 
-Create Post <img src="readme_images/createpost.jpeg">
+#### Create Post 
+<img src="readme_images/createpost.jpeg">
 
-Feed Page <img src="readme_images/feed.jpeg">
+#### Feed Page 
+<img src="readme_images/feed.jpeg">
 
-Categories Page <img src="readme_images/categs.jpeg">
+#### Categories Page 
+<img src="readme_images/categs.jpeg">
 
-Posts of individual category <img src="readme_images/cate.jpeg">
+#### Posts of individual category 
+<img src="readme_images/cate.jpeg">
 
-User Profile <img src="readme_images/profile.jpeg">
+#### User Profile 
+<img src="readme_images/profile.jpeg">
 
-Category ShoutOut <img src="readme_images/shoutout.jpeg">
+#### Category ShoutOut 
+<img src="readme_images/shoutout.jpeg">
 
-Chat with user <img src="readme_images/chatroom.jpeg">
+#### Chat with user 
+<img src="readme_images/chatroom.jpeg">
+
 <img src="readme_images/post.jpeg">
