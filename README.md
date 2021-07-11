@@ -32,7 +32,7 @@ It is a Flutter application made for users to chat and interact with people havi
 <img src="readme_images/categs.jpeg">
 
 #### Posts of individual category 
-<img src="readme_images/categ.jpeg">
+<img src="readme_images/cate.jpeg">
 
 #### Category ShoutOut 
 <img src="readme_images/shoutout.jpeg">
@@ -44,6 +44,6 @@ It is a Flutter application made for users to chat and interact with people havi
 <img src="readme_images/profile.jpeg">
 
 #### Edit Profile 
-<img src="readme_images/edit_profile.jpeg">
+<img src="readme_images/edit_profile.jpg">
 
 <img src="readme_images/post.jpeg">
