@@ -28,28 +28,31 @@ class _SearchesState extends State<Searches> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    autofocus: true,
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,25,0,0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      autofocus: true,
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.search,
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isSearched = true;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      isSearched = true;
-                    });
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
             FutureBuilder<QuerySnapshot>(
               future: MyDBClass.getUserByUsername(_searchController.text),

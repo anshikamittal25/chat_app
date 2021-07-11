@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  'Instagram',
+                  'SocioChat',
                   style: TextStyle(
                       color: Colors.black, fontFamily: 'Pattaya', fontSize: 50),
                 ),

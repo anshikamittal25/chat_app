@@ -24,7 +24,7 @@ class _FeedPageState extends State<FeedPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Instagram',
+          'SocioChat',
           style: TextStyle(
               color: Colors.black, fontFamily: 'Pattaya', fontSize: 30),
         ),

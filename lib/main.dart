@@ -12,7 +12,7 @@ void main() {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Instagram',
+    title: 'SocioChat',
     theme: ThemeData(
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: AppBarTheme(color: Colors.white,elevation: 0,),
